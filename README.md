@@ -33,3 +33,28 @@ RPG game features:
 - Set weapons, equippables
 
 
+Tech Stack:
+
+Programming language:
+- Typescript
+
+Frameworks:
+- React Native
+- Expo
+- Expo Router
+
+Libraries:
+- Three.js
+- Expo GL
+- React Native SVG
+
+Storage:
+- Expo SQLite
+
+API's:
+- Expo Speech
+- Expo Notifications
+- ExerciseDB API
+
+Asset Generation:
+- AssetFurnace(QWEN model to generate AI images to turn into 3D assets, Pixal3D, Trellis 2.0)
