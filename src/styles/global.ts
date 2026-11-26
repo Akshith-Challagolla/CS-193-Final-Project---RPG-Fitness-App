@@ -58,13 +58,5 @@ export const globalStyles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
-  },
-  upperTitle: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#f8fafc',
-    textAlign: 'center',
-    marginBottom: 12,
-    justifyContent: 'flex-start'
   }
 });
