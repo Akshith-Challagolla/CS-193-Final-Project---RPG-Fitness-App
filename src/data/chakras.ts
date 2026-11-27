@@ -25,6 +25,8 @@ export const chakraImages = {
 };
 
 // 7 chakra symbols for use in app development - TODO: look online
+//What is the order? (random, each isn't REALLy associated with a day of the week but people do group them so we can
+//kind of play along and add those as well)
 //https://www.coolsymbol.top/all-symbol.html
 export const chakras: Record<string, Chakra> = {
 

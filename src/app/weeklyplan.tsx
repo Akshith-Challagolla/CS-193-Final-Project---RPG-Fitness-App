@@ -21,11 +21,14 @@ import {
 
 import type { WorkoutExercise } from "../utils/workoutDifficulty";
 
+import { router } from 'expo-router';
 import { chakras } from "../data/chakras";
+import { globalStyles } from '../styles/global';
 import { theme } from "../styles/theme";
 import { selectExercises } from "../utils/exerciseSelector";
 import { assignWorkoutDifficulty } from "../utils/workoutDifficulty";
-export default function App() {
+
+export default function Plan() {
   const db = useSQLiteContext();
 
   const [plan, setPlan] = useState<DetailedWorkoutDay[]>([]);
@@ -149,7 +152,7 @@ export default function App() {
       <Text style={styles.title}>Your Weekly Plan</Text>
 
       <Text style={styles.subtitle}>
-        Some text here.
+        Click each day to see your curated schedule.
       </Text>
 
 
@@ -235,6 +238,23 @@ export default function App() {
         )}
     </Pressable>
     ))}
+
+      {/* Temporary button to access the story screen */}
+      <Pressable
+        style={({ pressed }) => [
+          globalStyles.rpgButton,
+          {
+            opacity: pressed ? 0.7 : 1,
+            transform: [{ scale: pressed ? 0.96 : 1 }],
+            marginTop: 20,
+          },
+        ]}
+        onPress={() => router.push("/story")}
+      >
+        <Text style={globalStyles.rpgButtonText}>
+          BEGIN STORY →
+        </Text>
+      </Pressable>
     </ScrollView>
   );
 }
@@ -244,6 +264,7 @@ export default function App() {
 type DetailedWorkoutDay = WorkoutDay & {
   exercises: WorkoutExercise[];
 };
+
 
 
 const styles = StyleSheet.create({
@@ -257,20 +278,21 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   title: {
-    fontSize: 27,
-    fontWeight: "bold",
+    fontFamily: "MedievalSharp_400Regular",
+    fontSize: 32,
     color: theme.parchment,
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 15,
-    color: "#C5A46A",
+    fontFamily: "CormorantGaramond_400Regular_Italic",
+    fontSize: 21,
+    color: theme.gold,
     marginBottom: 28,
   },
   dayCard: {
     backgroundColor: theme.stone,
     padding: 18,
-    borderRadius: 12,
+    borderRadius: 0,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: theme.border,
@@ -280,74 +302,81 @@ const styles = StyleSheet.create({
     borderColor: "#353D35",
   },
   day: {
-    fontSize: 14,
-    color: "#C5A46A",
-    fontWeight: "bold",
+    fontFamily: "MedievalSharp_400Regular",
+    fontSize: 18,
+    color: theme.gold,
     marginBottom: 6,
   },
   workout: {
+    fontFamily: "Inter_700Bold",
     fontSize: 19,
-    color: "#FFFFFF",
-    fontWeight: "bold",
+    color: theme.parchment,
     marginBottom: 4,
   },
   description: {
+    fontFamily: "Inter_400Regular",
     fontSize: 13,
     color: "#C9C6B8",
   },
 
-    exerciseList: {
+  exerciseList: {
     marginTop: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "#45614D",
-    },
+    borderTopColor: theme.goldDark,
+  },
 
-    exerciseItem: {
+  exerciseItem: {
     marginBottom: 14,
-    },
+    paddingLeft: 12,
+    borderLeftWidth: 2,
+    borderLeftColor: theme.goldDark,
+  },
 
-    exerciseName: {
+  exerciseName: {
+    fontFamily: "Inter_600SemiBold",
     fontSize: 16,
-    color: "#E8DCC4",
-    fontWeight: "600",
+    color: theme.parchment,
     marginBottom: 4,
-    },
+  },
 
-    exerciseDetails: {
+  exerciseDetails: {
+    fontFamily: "Inter_400Regular",
     fontSize: 14,
-    color: "#C5A46A",
-    },
+    color: theme.gold,
+  },
 
-    exerciseRest: {
+  exerciseRest: {
+    fontFamily: "Inter_400Regular",
     fontSize: 12,
     color: "#B8B8AC",
     marginTop: 3,
-    },
-    //only for chakra
-    chakraRow: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: 16,
-    },
+  },
 
-    // Chakra image displayed beside each workout
-    chakraImage: {
-      width: 58,
-      height: 58,
-    },
+  //only for chakra
+  chakraRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
 
-    // Allows the workout information to use remaining space
-    chakraInfo: {
-      flex: 1,
-    },
+  // Chakra image displayed beside each workout
+  chakraImage: {
+    width: 58,
+    height: 58,
+  },
 
-    // Displays the corresponding chakra name
-    chakraName: {
-      fontSize: 13,
-      fontWeight: "600",
-      letterSpacing: 1,
-      marginBottom: 5,
-    }
+  // Allows the workout information to use remaining space
+  chakraInfo: {
+    flex: 1,
+  },
 
+  // Displays the corresponding chakra name
+  chakraName: {
+    fontSize: 13,
+    fontWeight: "600",
+    letterSpacing: 1,
+    marginBottom: 5,
+  },
 });
+

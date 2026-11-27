@@ -4,10 +4,13 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 // import useSQLiteContext to store values
+import { theme } from '@/styles/theme';
 import { useSQLiteContext } from 'expo-sqlite';
 
 export default function OnboardingScreen() {
 
+	// button hover state as used and updated in title screen
+	const [hovered, setHovered] = useState(false);
     // store the possible answers for our first question, this is array storing
     // Now we'll store multiple questions, each with its own options
     const questions = [
@@ -69,6 +72,7 @@ export default function OnboardingScreen() {
     };
 
     const db = useSQLiteContext();
+    
 
     const handleProceed = async () => {
         // Save the answers to the database
@@ -88,7 +92,7 @@ export default function OnboardingScreen() {
             );
             console.log('Profile saved successfully!');
 
-            router.replace('/app');
+            router.replace('/weeklyplan');
         } catch (error) {
             console.error('Failed to save profile:', error);
         }
@@ -204,32 +208,41 @@ export default function OnboardingScreen() {
                     
                     </Pressable> */}
 
-                    <Pressable 
-                        style={({ pressed }) => [
-                            globalStyles.button,
-                            {
-                                opacity: pressed ? 0.7 : 1,
-                                transform: [{ scale: pressed ? 0.96 : 1 }],
-                            }        
-                        ]}
-                        // Replace push with .replace to prevent going back to onboarding
+                    <Pressable
+						          onHoverIn={() => setHovered(true)}
+						          onHoverOut={() => setHovered(false)}
+						          onPress={handleProceed}
+						          style={({ pressed }) => [
+							          globalStyles.rpgButton,
+							          {
+							            opacity: pressed ? 0.65 : hovered ? 0.8 : 1,
+							            transform: [{ scale: pressed ? 0.96 : 1 }],
+							          },
+						          ]}
+						            // Replace push with .replace to prevent going back to onboarding
                         //onPress={() => handleProceed()} -> This creates another function that calls handleProceed, 
                         // we can just call handleProceed directly since its already a function
-                        onPress={handleProceed}
-                        
-                        >
-                        <Text style={globalStyles.buttonText}>Proceed →</Text>
+                    >
+                        <Text style={globalStyles.rpgButtonText}>Proceed →</Text>
                     </Pressable>                   
 
                     {/* Button for Restarting the assessment */}
                     <Pressable
-                        style={globalStyles.button}
-                        onPress={() => {
-                            setAnswers({});
-                            setCurrentQuestion(0);
-                        }}
+					            onHoverIn={() => setHovered(true)}
+						          onHoverOut={() => setHovered(false)}   
+					            onPress={() => {
+					              setAnswers({});
+						            setCurrentQuestion(0);
+					            }}
+                      style={({ pressed }) => [
+							          globalStyles.rpgButton,
+							          {
+							            opacity: pressed ? 0.65 : hovered ? 0.8 : 1,
+							            transform: [{ scale: pressed ? 0.96 : 1 }],
+							          },
+						          ]}
                     >
-                        <Text style={globalStyles.buttonText}>
+                        <Text style={globalStyles.rpgButtonText}>
                             Start Again ↻
                         </Text>
                     </Pressable>
@@ -242,163 +255,167 @@ export default function OnboardingScreen() {
 
 // Here we want to add styles that fit the questionaire screen, I might move these to global styles
 //Work on formatting for question box
+
 const styles = StyleSheet.create({
-  
-    container: {
-    flex: 1,
-    backgroundColor: '#503F0C',
-    },
-    scrollContent: {
-        flexGrow: 1,
-        paddingHorizontal: 24,
-        paddingTop: 80,
-        paddingBottom: 40,
-        gap: 20,
-    },
 
-    title: {
-        fontSize: 32,
-        fontWeight: '700',
-        color: '#FFFFFF',
-        textAlign: 'center',
-        marginBottom: 12,
-    },
+  container: {
+	flex: 1,
+	backgroundColor: theme.black,
+  },
 
-    progressText: {
-        fontSize: 14,
-        color: '#F1E4BE',
-        fontWeight: '600',
-        textAlign: 'center',
-    },
+  scrollContent: {
+	flexGrow: 1,
+	paddingHorizontal: 24,
+	paddingTop: 80,
+	paddingBottom: 40,
+	gap: 20,
+  },
 
-    progressTrack: {
-        height: 8,
-        backgroundColor: '#75632A',
-        borderRadius: 4,
-        overflow: 'hidden',
-    },
+  title: {
+	fontFamily: "MedievalSharp_400Regular",
+	fontSize: 32,
+	color: theme.parchment,
+	textAlign: 'center',
+	marginBottom: 12,
+  },
 
-    progressFill: {
-        height: '100%',
-        backgroundColor: '#C9AC68',
-        borderRadius: 4,
-    },
+  progressText: {
+	fontFamily: "Inter_600SemiBold",
+	fontSize: 14,
+	color: theme.parchment,
+	textAlign: 'center',
+  },
 
-    questionBox: {
-        backgroundColor: '#63501E',
-        borderWidth: 3,
-        borderColor: '#C9AC68',
-        borderRadius: 18,
-        padding: 20,
-        gap: 20,
-    },
+  progressTrack: {
+	height: 8,
+	backgroundColor: theme.stoneDark,
+	borderRadius: 4,
+	overflow: 'hidden',
+  },
 
-    questionText: {
-        color: '#FFFFFF',
-        fontSize: 22,
-        fontWeight: '700',
-        textAlign: 'center',
-        marginBottom: 12,
-    },
+  progressFill: {
+	height: '100%',
+	backgroundColor: theme.gold,
+	borderRadius: 4,
+  },
 
-    optionsContainer: {
-        width: '100%',
-        gap: 12,
-    },
+  questionBox: {
+	backgroundColor: theme.panel,
+	borderWidth: 2,
+	borderColor: theme.goldDark,
+	borderRadius: 0,
+	padding: 20,
+	gap: 20,
+  },
 
-    button: {
-        backgroundColor: '#1E3B2F',
-        paddingVertical: 16,
-        paddingHorizontal: 20,
-        borderRadius: 12,
-        borderWidth: 3,
-        borderColor: '#779480',
-        width: '100%',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 6,
-        elevation: 4,
-    },
+  questionText: {
+	fontFamily: "CormorantGaramond_600SemiBold",
+	color: theme.parchment,
+	fontSize: 26,
+	textAlign: 'center',
+	marginBottom: 12,
+  },
 
-    selectedButton: {
-        backgroundColor: '#8579DD',
-        borderWidth: 3,
-        borderColor: '#FFFFFF',
-    },
+  optionsContainer: {
+	width: '100%',
+	gap: 12,
+  },
 
-    buttonText: {
-        color: '#FFFFFF',
-        fontSize: 17,
-        fontWeight: '600',
-    },
+  button: {
+	backgroundColor: theme.stone,
+	paddingVertical: 16,
+	paddingHorizontal: 20,
+	borderRadius: 0,
+	borderWidth: 1,
+	borderColor: theme.goldDark,
+	width: '100%',
+	alignItems: 'center',
+	shadowColor: theme.black,
+	shadowOffset: { width: 0, height: 4 },
+	shadowOpacity: 0.2,
+	shadowRadius: 6,
+	elevation: 4,
+  },
 
-    navigationContainer: {
-        flexDirection: 'row',
-        gap: 12,
-        justifyContent: 'flex-end',
-    },
+  selectedButton: {
+	backgroundColor: theme.button,
+	borderWidth: 2,
+	borderColor: theme.gold,
+  },
 
-    backButton: {
-        paddingVertical: 16,
-        paddingHorizontal: 24,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: '#C9AC68',
-    },
+  buttonText: {
+	fontFamily: "Inter_600SemiBold",
+	color: theme.parchment,
+	fontSize: 17,
+  },
 
-    backButtonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: '700',
-    },
+  navigationContainer: {
+	flexDirection: 'row',
+	gap: 12,
+	justifyContent: 'flex-end',
+  },
 
-    nextButton: {
-        backgroundColor: '#1E3B2F',
-        paddingVertical: 16,
-        paddingHorizontal: 30,
-        borderRadius: 12,
-        borderWidth: 3,
-        borderColor: '#C9AC68',
-        alignItems: 'center',
-    },
+  backButton: {
+	paddingVertical: 16,
+	paddingHorizontal: 24,
+	borderRadius: 0,
+	borderWidth: 2,
+	borderColor: theme.goldDark,
+  },
 
-    nextButtonText: {
-        color: '#FFFFFF',
-        fontSize: 17,
-        fontWeight: '700',
-    },
+  backButtonText: {
+	fontFamily: "Inter_700Bold",
+	color: theme.parchment,
+	fontSize: 16,
+  },
 
-    disabledButton: {
-        opacity: 0.4,
-    },
+  nextButton: {
+	backgroundColor: theme.button,
+	paddingVertical: 16,
+	paddingHorizontal: 30,
+	borderRadius: 0,
+	borderWidth: 2,
+	borderColor: theme.gold,
+	alignItems: 'center',
+  },
 
-    completedBox: {
-        backgroundColor: '#63501E',
-        borderWidth: 3,
-        borderColor: '#C9AC68',
-        borderRadius: 18,
-        padding: 28,
-        alignItems: 'center',
-        gap: 24,
-    },
+  nextButtonText: {
+	fontFamily: "MedievalSharp_400Regular",
+	color: theme.parchment,
+	fontSize: 17,
+  },
 
-    completedTitle: {
-        color: '#FFFFFF',
-        fontSize: 36,
-        fontWeight: '800',
-        textAlign: 'center',
-    },
+  disabledButton: {
+	opacity: 0.4,
+  },
 
-    completedDescription: {
-        color: '#F1E4BE',
-        fontSize: 18,
-        textAlign: 'center',
-        lineHeight: 28,
-    },
+  completedBox: {
+	backgroundColor: theme.panel,
+	borderWidth: 2,
+	borderColor: theme.goldDark,
+	borderRadius: 0,
+	padding: 28,
+	alignItems: 'center',
+	gap: 24,
+  },
+
+  completedTitle: {
+	fontFamily: "MedievalSharp_400Regular",
+	color: theme.parchment,
+	fontSize: 36,
+	textAlign: 'center',
+  },
+
+  completedDescription: {
+	fontFamily: "CormorantGaramond_400Regular",
+	color: theme.parchment,
+	fontSize: 22,
+	textAlign: 'center',
+	lineHeight: 28,
+  },
 
 });
+
 
 
 //We are currently not saving any information, we need to save information using
